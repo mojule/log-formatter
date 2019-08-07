@@ -1,0 +1,25 @@
+{
+  "name": "@mojule/log-formatter",
+  "version": "0.1.0",
+  "description": "Simple formatting for logging",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "examples": "tsc && node ./examples/default && node ./examples/fs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mojule/log-formatter.git"
+  },
+  "keywords": [],
+  "author": "Nik Coughlin <nrkn.com@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mojule/log-formatter/issues"
+  },
+  "homepage": "https://github.com/mojule/log-formatter#readme",
+  "devDependencies": {
+    "@types/node": "^12.7.0"
+  }
+}
