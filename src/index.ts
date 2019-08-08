@@ -1,56 +1,105 @@
-import { LogLevel, Primitive, LogFunction, Logger } from './types'
+import {
+  Primitive, Logger, LogLevel, CreateLoggerOptions
+} from './types'
 
 export const createLogger = (
-  info: LogFunction = console.log,
-  error: LogFunction = console.error,
-  warn: LogFunction = console.warn
+  options: CreateLoggerOptions = defaultCreateLoggerOptions
 ) => {
+  const loggerFn = Object.assign( {}, noopLogger, options )
+
   const timeStarts = new Map<string, [ number, number ]>()
 
   const log = ( level: LogLevel, head?: any, ...args: any ) => {
     const message = decorateLog( level, head, ...args )
+    const logFn = loggerFn[ level ]
 
-    if ( level === 'info' || level === 'time' ) {
-      info( message )
+    logFn( message )
+  }
+
+  const createLoggerFn = ( type: LogLevel ) =>
+    ( head?: any, ...params: any ) => log( type, head, ...params )
+
+  const debug = createLoggerFn( 'debug' )
+
+  const trace = ( head?: any, ...params: any ) => {
+    try{
+      throw Error( 'trace' )
+    } catch( err ){
+      const { stack } = err
+
+      let traceResult = ''
+
+      const lines = stack.split( '\n' )
+
+      if( lines.length > 2 ){
+        const [ , , ...rest ] = lines
+
+        traceResult = `Trace:\n${ rest.join( '\n' ) }`
+      }
+
+      log(
+        'trace',
+        head, ...params,
+        traceResult
+      )
     }
+  }
 
-    if ( level === 'error' ) {
-      error( message )
-    }
+  const info = createLoggerFn( 'info' )
+  const warn = createLoggerFn( 'warn' )
+  const error = createLoggerFn( 'error' )
+  const fatal = createLoggerFn( 'fatal' )
 
-    if ( level === 'warn' ) {
-      warn( message )
+  const time = ( key: string, ...params: any ) => {
+    const startTime = timeStarts.get( key )
+
+    if ( startTime ) {
+      timeStarts.delete( key )
+
+      const [ s, ns ] = process.hrtime( startTime )
+
+      log( 'time', 'End', key, `${ s }s ${ ns / 1e6 }ms`, ...params )
+    } else {
+      timeStarts.set( key, process.hrtime() )
+
+      log( 'time', 'Start', key, ...params )
     }
   }
 
   const logger: Logger = {
-    info: ( head?: any, ...args: any ) => log( 'info', head, ...args ),
-    error: ( head?: any, ...args: any ) => log( 'error', head, ...args ),
-    warn: ( head?: any, ...args: any ) => log( 'warn', head, ...args ),
-    time: ( key: string ) => {
-      const startTime = timeStarts.get( key )
-
-      if ( startTime ) {
-        timeStarts.delete( key )
-
-        const [ s, ns ] = process.hrtime( startTime )
-
-        log( 'time', 'End', key, `${ s }s ${ ns / 1e6 }ms` )
-      } else {
-        timeStarts.set( key, process.hrtime() )
-
-        log( 'time', 'Start', key )
-      }
-    }
+    trace, debug, info, warn, error, fatal, time
   }
 
   return logger
 }
 
-export const logger = createLogger()
+export const defaultCreateLoggerOptions: CreateLoggerOptions = {
+  trace: console.debug,
+  debug: console.debug,
+  time: console.debug,
+  info: console.info,
+  warn: console.warn,
+  error: console.error,
+  fatal: console.error
+}
 
-const levels: LogLevel[] = [ 'error', 'info', 'warn', 'time' ]
-const maxLength = Math.max( ...levels.map( l => l.length ) )
+const noop = () => { }
+
+const noopLogger: Logger = {
+  trace: noop,
+  debug: noop,
+  info: noop,
+  warn: noop,
+  error: noop,
+  fatal: noop,
+  time: noop
+}
+
+export const logLevels: LogLevel[] = [
+  'trace', 'debug', 'time', 'info', 'warn', 'error', 'fatal'
+]
+
+const maxLength = Math.max( ...logLevels.map( l => l.length ) )
 const columnSeparator = '\t'
 const lineSeparatorLength = 80
 const heavySeparator = `\n${ '━'.repeat( lineSeparatorLength ) }`
@@ -138,3 +187,5 @@ const decorateLog = ( level: LogLevel, head?: any, ...args: any[] ) => {
     heavySeparator
   }`
 }
+
+export const logger = createLogger()

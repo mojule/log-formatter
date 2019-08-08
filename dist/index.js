@@ -1,41 +1,74 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createLogger = (info = console.log, error = console.error, warn = console.warn) => {
+exports.createLogger = (options = exports.defaultCreateLoggerOptions) => {
+    const loggerFn = Object.assign({}, noopLogger, options);
     const timeStarts = new Map();
     const log = (level, head, ...args) => {
         const message = decorateLog(level, head, ...args);
-        if (level === 'info' || level === 'time') {
-            info(message);
+        const logFn = loggerFn[level];
+        logFn(message);
+    };
+    const createLoggerFn = (type) => (head, ...params) => log(type, head, ...params);
+    const debug = createLoggerFn('debug');
+    const trace = (head, ...params) => {
+        try {
+            throw Error('trace');
         }
-        if (level === 'error') {
-            error(message);
+        catch (err) {
+            const { stack } = err;
+            let traceResult = '';
+            const lines = stack.split('\n');
+            if (lines.length > 2) {
+                const [, , ...rest] = lines;
+                traceResult = `Trace:\n${rest.join('\n')}`;
+            }
+            log('trace', head, ...params, traceResult);
         }
-        if (level === 'warn') {
-            warn(message);
+    };
+    const info = createLoggerFn('info');
+    const warn = createLoggerFn('warn');
+    const error = createLoggerFn('error');
+    const fatal = createLoggerFn('fatal');
+    const time = (key, ...params) => {
+        const startTime = timeStarts.get(key);
+        if (startTime) {
+            timeStarts.delete(key);
+            const [s, ns] = process.hrtime(startTime);
+            log('time', 'End', key, `${s}s ${ns / 1e6}ms`, ...params);
+        }
+        else {
+            timeStarts.set(key, process.hrtime());
+            log('time', 'Start', key, ...params);
         }
     };
     const logger = {
-        info: (head, ...args) => log('info', head, ...args),
-        error: (head, ...args) => log('error', head, ...args),
-        warn: (head, ...args) => log('warn', head, ...args),
-        time: (key) => {
-            const startTime = timeStarts.get(key);
-            if (startTime) {
-                timeStarts.delete(key);
-                const [s, ns] = process.hrtime(startTime);
-                log('time', 'End', key, `${s}s ${ns / 1e6}ms`);
-            }
-            else {
-                timeStarts.set(key, process.hrtime());
-                log('time', 'Start', key);
-            }
-        }
+        trace, debug, info, warn, error, fatal, time
     };
     return logger;
 };
-exports.logger = exports.createLogger();
-const levels = ['error', 'info', 'warn', 'time'];
-const maxLength = Math.max(...levels.map(l => l.length));
+exports.defaultCreateLoggerOptions = {
+    trace: console.debug,
+    debug: console.debug,
+    time: console.debug,
+    info: console.log,
+    warn: console.warn,
+    error: console.error,
+    fatal: console.error
+};
+const noop = () => { };
+const noopLogger = {
+    trace: noop,
+    debug: noop,
+    info: noop,
+    warn: noop,
+    error: noop,
+    fatal: noop,
+    time: noop
+};
+exports.logLevels = [
+    'trace', 'debug', 'time', 'info', 'warn', 'error', 'fatal'
+];
+const maxLength = Math.max(...exports.logLevels.map(l => l.length));
 const columnSeparator = '\t';
 const lineSeparatorLength = 80;
 const heavySeparator = `\n${'━'.repeat(lineSeparatorLength)}`;
@@ -96,4 +129,5 @@ const decorateLog = (level, head, ...args) => {
     const message = formatMultiline(argsToParts([head, ...args]));
     return `${[prefix, timestamp].join(columnSeparator)}${message}${heavySeparator}`;
 };
+exports.logger = exports.createLogger();
 //# sourceMappingURL=index.js.map

@@ -12,12 +12,25 @@ const append = ( path, data ) => appendFile(
 
 const writeOut = content => append( stdOut, content )
 const writeErr = content => append( stdErr, content )
-const writeWarn = writeErr
 
-const logger = createLogger( writeOut, writeErr, writeWarn )
+const trace = writeOut
+const debug = writeOut
+const time = writeOut
+const info = writeOut
+const warn = writeErr
+const error = writeErr
+const fatal = writeErr
+
+const options = {
+  trace, debug, time, info, warn, error, fatal
+}
+
+const logger = createLogger( options )
 
 logger.time( 'My program' )
 
+logger.trace( 'My program trace' )
+logger.debug( 'Debug', { foo: { bar: { baz: [ 1, 2, 3 ] } } } )
 logger.info( 'Hello, world!', 1, [ 1, 2, 3 ], 'etc' )
 
 try {
@@ -27,5 +40,6 @@ try {
 } catch( err ){
   logger.error( err )
 } finally {
+  logger.fatal( 'Exiting program because of the bad thing' )
   logger.time( 'My program' )
 }

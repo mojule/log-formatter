@@ -1,12 +1,12 @@
 {
   "name": "@mojule/log-formatter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Simple formatting for logging",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "examples": "tsc && node ./examples/default && node ./examples/fs"
+    "examples": "tsc && rimraf ./examples/*.txt && node ./examples/default && node ./examples/fs"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/mojule/log-formatter#readme",
   "devDependencies": {
-    "@types/node": "^12.7.0"
+    "@types/node": "^12.7.0",
+    "rimraf": "^2.6.3"
   }
 }

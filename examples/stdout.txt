@@ -1,6 +1,33 @@
-time 	2019-08-07T03:54:13.650Z	Start	My program
+time 	2019-08-08T00:40:02.875Z	Start	My program
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-info 	2019-08-07T03:54:13.653Z	Hello, world!	1	[ 1, 2, 3 ]	etc
+trace	2019-08-08T00:40:02.879Z	My program trace
+────────────────────────────────────────────────────────────────────────────────
+Trace:
+    at Object.<anonymous> (log-formatter/examples/fs.js:32:8)
+    at Module._compile (internal/modules/cjs/loader.js:689:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:700:10)
+    at Module.load (internal/modules/cjs/loader.js:599:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:538:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:530:3)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:742:12)
+    at startup (internal/bootstrap/node.js:279:19)
+    at bootstrapNodeJSCore (internal/bootstrap/node.js:752:3)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-time 	2019-08-07T03:54:13.656Z	End	My program	0s 5.747581ms
+debug	2019-08-08T00:40:02.879Z	Debug
+────────────────────────────────────────────────────────────────────────────────
+{
+  "foo": {
+    "bar": {
+      "baz": [
+        1,
+        2,
+        3
+      ]
+    }
+  }
+}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+info 	2019-08-08T00:40:02.880Z	Hello, world!	1	[ 1, 2, 3 ]	etc
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+time 	2019-08-08T00:40:02.881Z	End	My program	0s 5.697131ms
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

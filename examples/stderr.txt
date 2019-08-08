@@ -1,9 +1,11 @@
-warn 	2019-08-07T03:54:13.654Z	Uh oh
+warn 	2019-08-08T00:40:02.880Z	Uh oh
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-error	2019-08-07T03:54:13.655Z	Error	A bad thing happened
+fatal	2019-08-08T00:40:02.880Z	Exiting program because of the bad thing
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+error	2019-08-08T00:40:02.880Z	Error	A bad thing happened
 ────────────────────────────────────────────────────────────────────────────────
 Error: A bad thing happened
-    at Object.<anonymous> (C:\Users\Nik Coughlin\Documents\GitHub\log-formatter\examples\fs.js:26:9)
+    at Object.<anonymous> (log-formatter/examples/fs.js:39:9)
     at Module._compile (internal/modules/cjs/loader.js:689:30)
     at Object.Module._extensions..js (internal/modules/cjs/loader.js:700:10)
     at Module.load (internal/modules/cjs/loader.js:599:32)
