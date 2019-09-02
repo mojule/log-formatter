@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const util_1 = require("./util");
 exports.createLogger = (options = exports.defaultCreateLoggerOptions) => {
     const loggerFn = Object.assign({}, noopLogger, options);
     const timeStarts = new Map();
@@ -49,8 +50,8 @@ exports.createLogger = (options = exports.defaultCreateLoggerOptions) => {
 exports.defaultCreateLoggerOptions = {
     trace: console.debug,
     debug: console.debug,
-    time: console.debug,
-    info: console.log,
+    time: console.info,
+    info: console.info,
     warn: console.warn,
     error: console.error,
     fatal: console.error
@@ -100,7 +101,7 @@ const argsToParts = (args) => {
             parts.push(primitiveArrayToString(v));
         }
         else {
-            parts.push(JSON.stringify(v, null, 2));
+            parts.push(util_1.stringify(v, 2));
         }
     });
     return parts;

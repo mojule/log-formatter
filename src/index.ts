@@ -1,6 +1,7 @@
 import {
   Primitive, Logger, LogLevel, CreateLoggerOptions
 } from './types'
+import { stringify } from './util';
 
 export const createLogger = (
   options: CreateLoggerOptions = defaultCreateLoggerOptions
@@ -76,7 +77,7 @@ export const createLogger = (
 export const defaultCreateLoggerOptions: CreateLoggerOptions = {
   trace: console.debug,
   debug: console.debug,
-  time: console.debug,
+  time: console.info,
   info: console.info,
   warn: console.warn,
   error: console.error,
@@ -145,7 +146,7 @@ const argsToParts = ( args: any[] ) => {
     } else if ( isPrimitiveArray( v ) ) {
       parts.push( primitiveArrayToString( v ) )
     } else {
-      parts.push( JSON.stringify( v, null, 2 ) )
+      parts.push( stringify( v, 2 ) )
     }
   } )
 
