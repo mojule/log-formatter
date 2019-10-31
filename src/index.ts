@@ -1,7 +1,7 @@
 import {
   Primitive, Logger, LogLevel, CreateLoggerOptions
 } from './types'
-import { stringify } from './util';
+import { stringify } from './util'
 
 export const createLogger = (
   options: CreateLoggerOptions = defaultCreateLoggerOptions
@@ -103,8 +103,8 @@ export const logLevels: LogLevel[] = [
 const maxLength = Math.max( ...logLevels.map( l => l.length ) )
 const columnSeparator = '\t'
 const lineSeparatorLength = 80
-const heavySeparator = `\n${ '━'.repeat( lineSeparatorLength ) }`
-const lightSeparator = `\n${ '─'.repeat( lineSeparatorLength ) }`
+const heavySeparator = `\n${ '='.repeat( lineSeparatorLength ) }`
+const lightSeparator = `\n${ '-'.repeat( lineSeparatorLength ) }`
 
 const padLevel = ( level: LogLevel ) => level.padEnd( maxLength, ' ' )
 

@@ -72,8 +72,8 @@ exports.logLevels = [
 const maxLength = Math.max(...exports.logLevels.map(l => l.length));
 const columnSeparator = '\t';
 const lineSeparatorLength = 80;
-const heavySeparator = `\n${'━'.repeat(lineSeparatorLength)}`;
-const lightSeparator = `\n${'─'.repeat(lineSeparatorLength)}`;
+const heavySeparator = `\n${'='.repeat(lineSeparatorLength)}`;
+const lightSeparator = `\n${'-'.repeat(lineSeparatorLength)}`;
 const padLevel = (level) => level.padEnd(maxLength, ' ');
 const isPrimitive = (value) => typeof value === 'string' || typeof value === 'number' ||
     typeof value === 'boolean' || typeof value === 'undefined' ||
