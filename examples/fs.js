@@ -6,7 +6,7 @@ const stdErr = './examples/stderr.txt'
 
 const append = ( path, data ) => appendFile(
   path, data + '\n', 'utf8', err => {
-    if( err ) console.error( err )
+    if ( err ) console.error( err )
   }
 )
 
@@ -37,9 +37,22 @@ try {
   logger.warn( 'Uh oh' )
 
   throw Error( 'A bad thing happened' )
-} catch( err ){
+} catch ( err ) {
   logger.error( err )
 } finally {
   logger.fatal( 'Exiting program because of the bad thing' )
   logger.time( 'My program' )
 }
+
+const getLocalTimestamp = () => {
+  const date = new Date()
+  const localTime = date.getTime() - ( date.getTimezoneOffset() * 60000 )
+
+  return new Date( localTime ).toJSON()
+}
+
+const localLogger = createLogger(
+  Object.assign( {}, options, { getTimestamp: getLocalTimestamp } )
+)
+
+localLogger.info( 'This should be using local time' )

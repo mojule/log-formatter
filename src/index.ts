@@ -1,6 +1,7 @@
 import {
   Primitive, Logger, LogLevel, CreateLoggerOptions
 } from './types'
+
 import { stringify } from './util'
 
 export const createLogger = (
@@ -8,10 +9,12 @@ export const createLogger = (
 ) => {
   const loggerFn = Object.assign( {}, noopLogger, options )
 
+  const { getTimestamp = defaultTimestamp } = loggerFn
+
   const timeStarts = new Map<string, [ number, number ]>()
 
   const log = ( level: LogLevel, head?: any, ...args: any ) => {
-    const message = decorateLog( level, head, ...args )
+    const message = decorateLog( level, getTimestamp, head, ...args )
     const logFn = loggerFn[ level ]
 
     logFn( message )
@@ -175,9 +178,11 @@ const formatMultiline = ( parts: string[] ) => {
   return result
 }
 
-const decorateLog = ( level: LogLevel, head?: any, ...args: any[] ) => {
+const decorateLog = (
+  level: LogLevel, getTimestamp: () => string, head?: any, ...args: any[]
+) => {
   const prefix = padLevel( level )
-  const timestamp = ( new Date() ).toJSON()
+  const timestamp = getTimestamp()
   const message = formatMultiline( argsToParts( [ head, ...args ] ) )
 
   return `${
@@ -188,5 +193,7 @@ const decorateLog = ( level: LogLevel, head?: any, ...args: any[] ) => {
     heavySeparator
   }`
 }
+
+const defaultTimestamp = () => ( new Date() ).toJSON()
 
 export const logger = createLogger()

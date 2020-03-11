@@ -3,9 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = require("./util");
 exports.createLogger = (options = exports.defaultCreateLoggerOptions) => {
     const loggerFn = Object.assign({}, noopLogger, options);
+    const { getTimestamp = defaultTimestamp } = loggerFn;
     const timeStarts = new Map();
     const log = (level, head, ...args) => {
-        const message = decorateLog(level, head, ...args);
+        const message = decorateLog(level, getTimestamp, head, ...args);
         const logFn = loggerFn[level];
         logFn(message);
     };
@@ -124,11 +125,12 @@ const formatMultiline = (parts) => {
     });
     return result;
 };
-const decorateLog = (level, head, ...args) => {
+const decorateLog = (level, getTimestamp, head, ...args) => {
     const prefix = padLevel(level);
-    const timestamp = (new Date()).toJSON();
+    const timestamp = getTimestamp();
     const message = formatMultiline(argsToParts([head, ...args]));
     return `${[prefix, timestamp].join(columnSeparator)}${message}${heavySeparator}`;
 };
+const defaultTimestamp = () => (new Date()).toJSON();
 exports.logger = exports.createLogger();
 //# sourceMappingURL=index.js.map

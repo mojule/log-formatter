@@ -1,6 +1,6 @@
 export declare type LogFunction = (message?: any, ...optionalParams: any[]) => void;
 export declare type TimeFunction = (key: string, ...optionalParams: any[]) => void;
-export declare type LogLevel = 'trace' | 'debug' | 'time' | 'info' | 'warn' | 'error' | 'fatal';
+export declare type LogLevel = ('trace' | 'debug' | 'time' | 'info' | 'warn' | 'error' | 'fatal');
 export interface CreateLoggerOptions {
     trace?: LogFunction;
     debug?: LogFunction;
@@ -9,6 +9,7 @@ export interface CreateLoggerOptions {
     error?: LogFunction;
     fatal?: LogFunction;
     time?: TimeFunction;
+    getTimestamp?: () => string;
 }
 export interface Logger {
     trace: LogFunction;
